@@ -50,7 +50,7 @@ public class TuioDemo : Form, TuioListener
 	private bool fullscreen;
 	private bool verbose;
 
-	public string serverIP = "DESKTOP-8161GCK"; // IP address of the Python server
+	public string serverIP = "LAPTOP-1M0ICHDK"; // IP address of the Python server
 	public int port = 8000;               // Port number matching the Python server
 	int flag = 0;
 	Font font = new Font("Arial", 10.0f);
@@ -93,7 +93,7 @@ public class TuioDemo : Form, TuioListener
 		client.connect();
 
 		// Create a TCP/IP socket
-		 client1 = new TcpClient("DESKTOP-8161GCK", 8000);
+		 client1 = new TcpClient("LAPTOP-1M0ICHDK", 8000);
 		// Get the stream to send data
 		 stream = client1.GetStream();
 
@@ -429,13 +429,13 @@ public class TuioDemo : Form, TuioListener
 		TuioDemo app = new TuioDemo(port);
 		Application.Run(app);
 	}
-	public void SendMarkerData(TuioObject  markerData)
+	public void SendMarkerData(TuioObject markerData)
 	{
 	
 		try
 		{				
 				// Replace with your TUIO marker data
-				string markerData1 = $"Marker ID: {markerData.SymbolID.ToString()}, X: {markerData.X.ToString()}, Y: {markerData.Y.ToString()}";
+				string markerData1 = $"{markerData.SymbolID.ToString()}";
 
 				// Convert the marker data to byte array
 				byte[] data = Encoding.UTF8.GetBytes(markerData1);
