@@ -22,3 +22,9 @@ C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj
 C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
 C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.exe
 C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
