@@ -137,7 +137,6 @@ def click_next_button():
 
 
 def mcq(x):
-    previous_selected_answer = None
     # Get the answers for the current question
     answers, answer_elements = get_answers()
     # If answers are found, proceed to ask the user
@@ -164,17 +163,7 @@ def mcq(x):
                 print(f"Trying to select answer {choice}")
 
                 selected_answer = answer_elements[choice - 1]
-
-                if previous_selected_answer:
-                    driver.execute_script("arguments[0].style.backgroundColor = '';", previous_selected_answer)
-
-                driver.execute_script("arguments[0].style.backgroundColor = 'yellow';", selected_answer)
-
-                #selected_answer.click()
-
-                # Update the previously selected answer to the current one
-                previous_selected_answer = True
-
+                selected_answer.click()
                 answer_elements.clear()
             except StaleElementReferenceException:
                 print("Stale element encountered while selecting answer. Retrying...")
