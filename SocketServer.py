@@ -10,8 +10,6 @@ from selenium.common.exceptions import StaleElementReferenceException, TimeoutEx
 # Initialize the browser (Chrome in this example)
 flag_start = 0
 flag_next = 0
-
-
 def get_question_info():
     try:
         print("Retrieving current question and total questions...")
@@ -139,6 +137,7 @@ def click_next_button():
 
 
 def mcq(x):
+    previous_selected_answer = None
     # Get the answers for the current question
     answers, answer_elements = get_answers()
     # If answers are found, proceed to ask the user
@@ -163,8 +162,19 @@ def mcq(x):
         if 1 <= choice <= valid_range:
             try:
                 print(f"Trying to select answer {choice}")
-                # Click the selected answer (handles both True/False and multiple-choice)
-                answer_elements[choice - 1].click()
+
+                selected_answer = answer_elements[choice - 1]
+
+                if previous_selected_answer:
+                    driver.execute_script("arguments[0].style.backgroundColor = '';", previous_selected_answer)
+
+                driver.execute_script("arguments[0].style.backgroundColor = 'yellow';", selected_answer)
+
+                #selected_answer.click()
+
+                # Update the previously selected answer to the current one
+                previous_selected_answer = True
+
                 answer_elements.clear()
             except StaleElementReferenceException:
                 print("Stale element encountered while selecting answer. Retrying...")
@@ -206,31 +216,34 @@ total_questions = 0
 
 while running:
     message = clientsocket.recv(1024).decode()  # Gets the incoming message
-    print(message)
+    if message:
+        # Split the message by the comma
+        parts = message.split(',')
+        # Check if there are at least two parts
+        if len(parts) >= 2:
+            id, angle = parts[0], parts[1]
+        else:
+            raise ValueError("Not enough values to unpack")
+        print(id,angle)
+        if id == '0':
+            click_button_by_css("._2K6khW87cf5FWvjCSSXG9z")
+            flag_start = 1
+        elif id == '1' and flag_start == 1 :
+            mcq(id)
+        elif id == '2' and flag_start == 1 :
+            mcq(id)
+        elif id == '3' and flag_start == 1 :
+            mcq(id)
+        elif id == '4' and flag_start == 1 :
+            mcq(id)
+        elif id == '5' and flag_start == 1 :
+            click_next_button()
+        elif id == '6' and flag_start == 1:
+            click_play_again()
+        elif id == '7' and flag_start == 1:
+            print("Closing the browser.")
+            driver.quit()  # Closes the browser
+            running = False  # Exit the loop to stop the server after closing the browser
+        else:
+            print("Unexpected id, please enter a valid one")
 
-    if message == '0':
-        click_button_by_css("._2K6khW87cf5FWvjCSSXG9z")
-        flag_start = 1
-    elif message == '1' and flag_start == 1 and flag_next == 0:
-        mcq(message)
-        flag_next = 1
-    elif message == '2' and flag_start == 1 and flag_next == 0:
-        mcq(message)
-        flag_next = 1
-    elif message == '3' and flag_start == 1 and flag_next == 0:
-        mcq(message)
-        flag_next = 1
-    elif message == '4' and flag_start == 1 and flag_next == 0:
-        mcq(message)
-        flag_next = 1
-    elif message == '5' and flag_start == 1 and flag_next == 1:
-        click_next_button()
-        flag_next = 0
-    elif message == '6' and flag_start == 1:
-        click_play_again()
-    elif message == '7' and flag_start == 1:
-        print("Closing the browser.")
-        driver.quit()  # Closes the browser
-        running = False  # Exit the loop to stop the server after closing the browser
-    else:
-        print("Unexpected id, please enter a valid one")
