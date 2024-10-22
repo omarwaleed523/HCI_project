@@ -165,6 +165,7 @@ def mcq(x):
                 selected_answer = answer_elements[choice - 1]
                 selected_answer.click()
                 answer_elements.clear()
+
             except StaleElementReferenceException:
                 print("Stale element encountered while selecting answer. Retrying...")
                 answer_elements = WebDriverWait(driver, 10).until(
@@ -229,16 +230,21 @@ while running:
         if id == '0':
             click_button_by_css("._2K6khW87cf5FWvjCSSXG9z")
             flag_start = 1
-        elif id == '1' and flag_start == 1 :
+        elif id == '1' and flag_start == 1 and flag_next==0:
             mcq(id)
-        elif id == '2' and flag_start == 1 :
+            flag_next = 1
+        elif id == '2' and flag_start == 1 and flag_next==0:
             mcq(id)
-        elif id == '3' and flag_start == 1 :
+            flag_next = 1
+        elif id == '3' and flag_start == 1 and flag_next==0:
             mcq(id)
-        elif id == '4' and flag_start == 1 :
+            flag_next = 1
+        elif id == '4' and flag_start == 1 and flag_next==0:
             mcq(id)
-        elif id == '5' and flag_start == 1 :
+            flag_next = 1
+        elif id == '5' and flag_start == 1 and flag_next==1 :
             click_next_button()
+            flag_next = 0
         elif id == '6' and flag_start == 1:
             click_play_again()
         elif id == '7' and flag_start == 1:
