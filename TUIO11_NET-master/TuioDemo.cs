@@ -50,7 +50,7 @@ public class TuioDemo : Form, TuioListener
 	private bool fullscreen;
 	private bool verbose;
 
-	public string serverIP = "DESKTOP-8161GCK"; // IP address of the Python server
+	public string serverIP = "LAPTOP-1M0ICHDK"; // IP address of the Python server
 	public int port = 8000;               // Port number matching the Python server
 	int flag = 0;
 	Font font = new Font("Arial", 10.0f);
@@ -93,7 +93,7 @@ public class TuioDemo : Form, TuioListener
 		client.connect();
 
 		// Create a TCP/IP socket
-		 client1 = new TcpClient("DESKTOP-8161GCK", 8000);
+		 client1 = new TcpClient("LAPTOP-1M0ICHDK", 8000);
 		// Get the stream to send data
 		 stream = client1.GetStream();
 
@@ -289,14 +289,15 @@ public class TuioDemo : Form, TuioListener
 					string backgroundImagePath;
 					switch (tobj.SymbolID)
 					{
-						case 1:
+                        case 0:
+                            objectImagePath = Path.Combine(Environment.CurrentDirectory, "pngegg_4.png");
+                            backgroundImagePath = Path.Combine(Environment.CurrentDirectory, "bg1.jpg");                            
+                                SendMarkerData(tobj);
+                            break;
+                        case 1:
 							objectImagePath = Path.Combine(Environment.CurrentDirectory, "pngegg_4.png");
 							backgroundImagePath = Path.Combine(Environment.CurrentDirectory, "bg1.jpg");
-							if (tobj.SymbolID != prev_id)
-							{
-								prev_id = tobj.SymbolID;
-								SendMarkerData(tobj);
-							}
+								SendMarkerData(tobj);							
 							break;
 						case 2:
 							objectImagePath = Path.Combine(Environment.CurrentDirectory, "pngegg_5.png");
@@ -306,16 +307,7 @@ public class TuioDemo : Form, TuioListener
 								prev_id = tobj.SymbolID;
 								SendMarkerData(tobj);
 							}
-							break;
-						case 0:
-							objectImagePath = Path.Combine(Environment.CurrentDirectory, "pngegg_3.png");
-							backgroundImagePath = Path.Combine(Environment.CurrentDirectory, "bg3.jpg");
-							if (tobj.SymbolID != prev_id)
-							{
-								prev_id = tobj.SymbolID;
-								SendMarkerData(tobj);
-							}
-							break;
+							break;												
 						case 8:
 							objectImagePath = Path.Combine(Environment.CurrentDirectory, "pngegg_3.png");
 							backgroundImagePath = Path.Combine(Environment.CurrentDirectory, "bg3.jpg");
@@ -442,7 +434,7 @@ public class TuioDemo : Form, TuioListener
 		try
 		{				
 				// Replace with your TUIO marker data
-				string markerData1 = $"{markerData.SymbolID.ToString()},{markerData.AngleDegrees.ToString()}";
+				string markerData1 = $"{markerData.SymbolID.ToString()},{markerData.AngleDegrees.ToString()},{markerData.X.ToString()},{markerData.Y.ToString()}";
 
 				// Convert the marker data to byte array
 				byte[] data = Encoding.UTF8.GetBytes(markerData1);
