@@ -4,22 +4,23 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import socket
-import pyautogui  # Import pyautogui for mouse control
+import pyautogui
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+import asyncio
+from bleak import BleakScanner
+from datetime import datetime
 
 # Initialize Chrome options for Incognito mode
 options = webdriver.ChromeOptions()
 options.add_argument("--incognito")
 
 # Socket configuration
-listensocket = socket.socket()  # Creates an instance of socket
-Port = 8000  # Port to host server on
+listensocket = socket.socket()
+Port = 8000
 maxConnections = 999
-IP = socket.gethostname()  # IP address of local machine
+IP = socket.gethostname()
 
 listensocket.bind(('', Port))
-
-# Starts server
 listensocket.listen(maxConnections)
 print("Server started at " + IP + " on port " + str(Port))
 
@@ -36,67 +37,74 @@ driver.get("https://quizizz.com/join/pre-game/running/U2FsdGVkX18N7Gbf%2BEwCpEuj
 # Clear cache and cookies
 driver.delete_all_cookies()
 
-def enter_fixed_username():
-    fixed_username = "hugo doro00"
+# Asynchronous function to get the first available MAC address
+async def get_first_mac_address():
+    RSSI_THRESHOLD = -90
+    try:
+        print("Scanning for Bluetooth devices...")
+        devices = await BleakScanner.discover()
+        print(f"Found {len(devices)} devices")
+
+        # Filter devices by RSSI threshold
+        for device in devices:
+            if device.rssi >= RSSI_THRESHOLD:
+                print(f"Using MAC Address as username: {device.address}")
+                return device.address  # Return the first MAC address found within range
+        print("No devices found within range.")
+        return None
+    except Exception as e:
+        print(f"Bluetooth scanning error: {e}")
+        return None
+
+# Function to enter the Bluetooth MAC address as username
+def enter_mac_as_username(mac_address):
     try:
         # Wait for the input field to be present
         search_box = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CLASS_NAME, "enter-name-field"))
         )
-        search_box.clear()  # Clear if any text is pre-entered
+        search_box.clear()  # Clear any pre-entered text
 
-        # Simulate real typing with a short delay between each character
-        for char in fixed_username:
+        # Enter the MAC address as the username
+        for char in mac_address:
             search_box.send_keys(char)
             time.sleep(0.1)
 
-        # Attempt to click the start button, handling overlay issues
+        # Close any overlay dialog if it exists
         try:
-            # Close the overlay if it has a close button
             overlay_close_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, ".close-button-class"))  # Replace with actual close button selector if available
+                EC.element_to_be_clickable((By.CSS_SELECTOR, ".close-button-class"))
             )
             overlay_close_button.click()
             print("Closed the overlay or dialog box.")
         except:
             print("No overlay dialog found.")
 
-        # Wait for the overlay to disappear, if it exists
+        # Wait for the overlay to disappear, if any
         WebDriverWait(driver, 10).until(
-            EC.invisibility_of_element_located((By.CSS_SELECTOR, ".dialog-container"))  # Replace with the actual overlay selector
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, ".dialog-container"))
         )
-        print("Overlay has disappeared.")
 
-        # Attempt JavaScript click as a fallback if overlay issues persist
+        # Click the start button using JavaScript as a fallback
         button = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".start-game.hover\\:cursor-pointer.primary-button"))
         )
         driver.execute_script("arguments[0].click();", button)
-        print("Button clicked successfully with username:", fixed_username)
-
-        # Check for any error messages displayed on the page
-        try:
-            error_message = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "error-message-class"))  # Replace with the actual class for error message, if any
-            )
-            if error_message.is_displayed():
-                print("Error message found:", error_message.text)
-                return False  # Indicate that an error occurred
-        except:
-            # No error message found, continue as normal
-            pass
-
-        return True  # Username accepted
+        print("Button clicked successfully with username:", mac_address)
 
     except Exception as e:
-        print("An error name occurred:", e)
-        return False  # Indicate an error if the username couldn't be entered
+        print("An error occurred while entering the username:", e)
 
-# Run the function once with the fixed username
-if enter_fixed_username():
-    print("Successfully entered username and clicked button.")
-else:
-    print("Failed to enter username or click the button.")
+# Main function to orchestrate Bluetooth scanning and username entry
+async def main():
+    mac_address = await get_first_mac_address()
+    if mac_address:
+        enter_mac_as_username(mac_address)
+    else:
+        print("Failed to retrieve MAC address; no username entered.")
+
+# Run the main asynchronous function
+asyncio.run(main())
 
 # Replace these with the original resolution that `x` and `y` are based on.
 original_width = 1920
