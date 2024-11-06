@@ -46,7 +46,7 @@ public class TuioDemo : Form, TuioListener
 	private int window_top = 0;
 	private int screen_width = Screen.PrimaryScreen.Bounds.Width;
 	private int screen_height = Screen.PrimaryScreen.Bounds.Height;
-	public int  prev_id=-1;
+	public int prev_id = -1;
 	private bool fullscreen;
 	private bool verbose;
 
@@ -93,9 +93,9 @@ public class TuioDemo : Form, TuioListener
 		client.connect();
 
 		// Create a TCP/IP socket
-		 client1 = new TcpClient("LAPTOP-1M0ICHDK", 8000);
+		client1 = new TcpClient("AhmedMostafa", 8000);
 		// Get the stream to send data
-		 stream = client1.GetStream();
+		stream = client1.GetStream();
 
 	}
 
@@ -285,25 +285,25 @@ public class TuioDemo : Form, TuioListener
 					g.DrawString(tobj.SymbolID + "", font, fntBrush, new PointF(ox - 10, oy - 10));
 					string objectImagePath;
 					string backgroundImagePath;
-                    switch (tobj.SymbolID)
-                    {
-                        case int id when id >= 0 && id <= 215:
-                            objectImagePath = Path.Combine(Environment.CurrentDirectory, $"object_{id}.png");
-                            backgroundImagePath = Path.Combine(Environment.CurrentDirectory, $"background_{id}.jpg");
-                            SendMarkerData(tobj);
-                            break;
-                        default:
-                            // Use default rectangle for other IDs not in range 0-269
-                            g.FillRectangle(objBrush, new Rectangle(ox - size / 2, oy - size / 2, size, size));
-                            g.DrawString(tobj.SymbolID + "", font, fntBrush, new PointF(ox - 10, oy - 10));
-                            if (tobj.SymbolID != prev_id)
-                            {
-                                prev_id = tobj.SymbolID;
-                                SendMarkerData(tobj);
-                            }
-                            continue;
-                    }
-                    try
+					switch (tobj.SymbolID)
+					{
+						case int id when id >= 0 && id <= 215:
+							objectImagePath = Path.Combine(Environment.CurrentDirectory, $"object_{id}.png");
+							backgroundImagePath = Path.Combine(Environment.CurrentDirectory, $"background_{id}.jpg");
+							SendMarkerData(tobj);
+							break;
+						default:
+							// Use default rectangle for other IDs not in range 0-269
+							g.FillRectangle(objBrush, new Rectangle(ox - size / 2, oy - size / 2, size, size));
+							g.DrawString(tobj.SymbolID + "", font, fntBrush, new PointF(ox - 10, oy - 10));
+							if (tobj.SymbolID != prev_id)
+							{
+								prev_id = tobj.SymbolID;
+								SendMarkerData(tobj);
+							}
+							continue;
+					}
+					try
 					{
 						// Draw background image without rotation
 						if (File.Exists(backgroundImagePath))
@@ -344,13 +344,13 @@ public class TuioDemo : Form, TuioListener
 							// Fall back to drawing a rectangle
 							g.FillRectangle(objBrush, new Rectangle(ox - size / 2, oy - size / 2, size, size));
 						}
-						
+
 					}
 					catch
 					{
 
 					}
-					
+
 				}
 			}
 		}
@@ -404,48 +404,63 @@ public class TuioDemo : Form, TuioListener
 		TuioDemo app = new TuioDemo(port);
 		Application.Run(app);
 	}
+	private bool capsLockOn = false;  // Boolean to track Caps Lock state
+
+	
+
 	public void SendMarkerData(TuioObject markerData)
 	{
-	
 		try
 		{
-            // Replace with your TUIO marker data
-            string markerDataString;
+			string markerDataString;
 			string flag = "0";
-            if (markerData.SymbolID >= 100 && markerData.SymbolID <= 125)
-            {
-                // Convert the SymbolID to an alphabet letter (A-Z) based on offset from 100
-                char letter = (char)('A' + (markerData.SymbolID - 100));
-                markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},{letter}";
-            }
-            else if (markerData.SymbolID == 126)
-            {
-                markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},?";
-            }
-            else if (markerData.SymbolID == 127)
-            {
-                markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},.";
-            }
-            else
-            {
-				// For any other IDs, send data without a character
-				flag = "1";
-                markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y}";
-            }
 
-            // Send the markerDataString
-            byte[] data = Encoding.UTF8.GetBytes(markerDataString);
-            stream.Write(data, 0, data.Length);
-            Console.WriteLine("Sent: {0}", markerDataString);
-			// Send the marker data to the server
+			// Check if Caps Lock marker (SymbolID 200) is scanned
+			if (markerData.SymbolID == 200)
+			{
+				// Toggle Caps Lock state
+				capsLockOn = !capsLockOn;
+				Console.WriteLine("Caps Lock " + (capsLockOn ? "ON" : "OFF"));  // Display Caps Lock status
+				return;  // Do not send a message for the Caps Lock toggle itself
+			}
+
+			// Process alphabet markers (A-Z) or other special markers
+			if (markerData.SymbolID >= 100 && markerData.SymbolID <= 125)
+			{
+				char letter = (char)('A' + (markerData.SymbolID - 100));
+				letter = capsLockOn ? char.ToUpper(letter) : char.ToLower(letter);  // Apply Caps Lock for case handling
+
+				markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},{letter}";
+			}
+			else if (markerData.SymbolID == 126)
+			{
+				markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},?";
+			}
+			else if (markerData.SymbolID == 127)
+			{
+				markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},.";
+			}
+			else if (markerData.SymbolID == 128)  // New case for "@"
+			{
+				markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y},@";
+			}
+			else
+			{
+				flag = "1";
+				markerDataString = $"{flag},{markerData.SymbolID},{markerData.AngleDegrees},{markerData.X},{markerData.Y}";
+			}
+
+			byte[] data = Encoding.UTF8.GetBytes(markerDataString);
 			stream.Write(data, 0, data.Length);
+			stream.Flush();
 			Console.WriteLine("Sent: {0}", markerDataString);
 
-					
 		}
 		catch (Exception e)
 		{
 			Console.WriteLine("Exception: {0}", e);
 		}
 	}
+
+
 }
