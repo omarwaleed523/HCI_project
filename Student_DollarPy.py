@@ -69,7 +69,7 @@ def Student_DollarPy():
 
     # Open the webpage
     driver.get(
-        "https://quizizz.com/join/pre-game/running/U2FsdGVkX18N7Gbf%2BEwCpEujXcpGrnOgmiPKE%2Blt%2BbOQi5GZrXHQUAO%2FIm%2FMHCqDScS2E7UVa5p2OlJFZUx49A%3D%3D/start")
+        "https://quizizz.com/join?gc=98746518")
 
     # Clear cache and cookies
     driver.delete_all_cookies()
@@ -161,8 +161,12 @@ def Student_DollarPy():
                         middle_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
 
                         # Convert index finger coordinates to screen coordinates and move mouse
-                        index_x, index_y = int(index_finger_tip.x * screen_width), int(
-                            index_finger_tip.y * screen_height)
+                        index_x = int(index_finger_tip.x * screen_width)
+                        index_y = int(index_finger_tip.y * screen_height)
+
+                        # Ensure coordinates stay within screen bounds to avoid fail-safe trigger
+                        index_x = min(max(index_x, 10), screen_width - 10)
+                        index_y = min(max(index_y, 10), screen_height - 10)
                         pyautogui.moveTo(index_x, index_y)
 
                         # Trigger a click if the middle fingertip is below the index fingertip
