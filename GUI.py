@@ -1,11 +1,13 @@
-import customtkinter as ctk
+import customtkinter as ctk  # type: ignore
 import cv2
 import pyautogui
 import mediapipe as mp
 import threading
 import time
-from PhysicalObject import Student
-from Teacher_Context import Teacher
+from F_Final_Student_Context import Student_TUIO
+from Teacher_Context import Teacher_TUIO
+from recg import Student_DollarPy
+
 # Global Variables
 stop_hand_tracking = False
 click_flag = False
@@ -16,26 +18,40 @@ def Create_GUI():
     ctk.set_appearance_mode("dark")  # Modes: "light" or "dark"
     ctk.set_default_color_theme("dark-blue")
     root = ctk.CTk()
-    root.geometry("500x300")
+    root.geometry("500x400")  # Adjusted height to fit new buttons
     root.title("Detect")
     root.attributes("-topmost", True)
 
     # Frame for grouping widgets
-    frame = ctk.CTkFrame(root, width=500, height=150, corner_radius=25)
-    frame.pack(pady=50)
-    # Widgets inside the frame
+    frame = ctk.CTkFrame(root, width=500, height=250, corner_radius=25)
+    frame.pack(pady=30)
+
+    # Label inside the frame
     frame_label = ctk.CTkLabel(frame, text="Who are you? (Student / Teacher)", font=("Arial", 14))
     frame_label.pack(pady=10)
-    teacher_button = ctk.CTkButton(frame, text="Teacher", fg_color='red',command=lambda:on_closing(root,Teacher))
-    teacher_button.pack(pady=10)
-    student_button = ctk.CTkButton(frame, text="Student", fg_color="green",command=lambda:on_closing(root,Student))
-    student_button.pack(pady=10)
+
+    # Existing buttons
+    teacher_button_tuio = ctk.CTkButton(frame, text="Teacher TUIO", fg_color='red',
+                                        command=lambda: on_closing(root, Teacher_TUIO))
+    teacher_button_tuio.pack(pady=10)
+    student_button_tuio = ctk.CTkButton(frame, text="Student TUIO", fg_color="green",
+                                        command=lambda: on_closing(root, Student_TUIO))
+    student_button_tuio.pack(pady=10)
+
+    #New button for DollarPy functionality
+    student_button_dollarpy = ctk.CTkButton(frame, text="Student DollarPy", fg_color="green", command=lambda: on_closing(root, Student_DollarPy))
+    student_button_dollarpy.pack(pady=10)
+
     # Handle closing the GUI and stopping hand tracking
     root.protocol("WM_DELETE_WINDOW", lambda: on_closing(root))
+
     # Start hand tracking in a separate thread
     hand_thread = threading.Thread(target=track_hand, daemon=True)
     hand_thread.start()
+
     root.mainloop()
+
+
 def track_hand():
     """Tracks hand movements and performs actions based on hand landmarks."""
     global stop_hand_tracking, click_flag, hold_flag
@@ -93,13 +109,16 @@ def track_hand():
     cap.release()
     cv2.destroyAllWindows()
 
-def on_closing(root,fun):
+
+def on_closing(root, fun=None):
     """Handles cleanup when the GUI is closed."""
     global stop_hand_tracking
     stop_hand_tracking = True  # Signal to stop hand tracking
     root.destroy()  # Close the GUI window
     print("Application closed.")
-    fun()
+    if fun:
+        fun()
+
 
 # Run the GUI
 if __name__ == "__main__":
