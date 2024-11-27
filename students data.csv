@@ -1,0 +1,5 @@
+id,name,age,grade,gender,student_id,school,class,gpa,email,photo_path,tuio_score,gesture_score,mac_address
+STU001,John Smith,16,10th,Male,HS001,Springfield High School,10-A,3.8,john.smith@studentmail.com,student_images/1.jpg,0,0,00:1A:2B:3C:4D:5E
+STU002,Sarah Johnson,15,9th,Female,HS002,Springfield High School,9-B,3.7,sarah.johnson@studentmail.com,student_images/2.jpg,0,0,11:2B:3C:4D:5E:6F
+STU003,Michael Chen,17,11th,Male,HS003,Riverside High School,11-C,3.5,michael.chen@studentmail.com,student_images/3.jpg,0,0,F8:20:A9:EA:1A:16
+STU004,Emily Davis,14,8th,Female,HS004,Riverside Middle School,8-D,4.0,emily.davis@studentmail.com,student_images/4.jpg,-25,0,33:4D:5E:6F:7G:8H
