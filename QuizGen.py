@@ -167,7 +167,7 @@ def CreateQuiz(student):
     quiz.mainloop()
 
 # Socket configuration
-def start_server_and_quiz():
+def start_server_and_quiz(student):
     listensocket = socket.socket()
     Port = 8000
     maxConnections = 999
@@ -181,8 +181,6 @@ def start_server_and_quiz():
     clientsocket, address = listensocket.accept()
     print(f"New connection made from {address}")
 
-    # Select the student for the quiz
-    student = students_data[0]  # For simplicity, choose the first student
     CreateQuiz(student)
 
 if __name__ == "__main__":
