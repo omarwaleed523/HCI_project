@@ -64,6 +64,22 @@ students_data = [
         'tuio_score': 0,
         'gesture_score': 0,
         'mac_address': '33:4D:5E:6F:7G:8H'
+    },
+    {
+        'id': 'STU005',
+        'name': 'MR. Dexter',
+        'age': 17,
+        'grade': '10th',
+        'gender': 'Male',
+        'student_id': 'HS005',
+        'school': 'Riverside Middle School',
+        'class': '8-D',
+        'gpa': 4.0,
+        'email': 'Dexter.sha3ban@studentmail.com',
+        'photo_path': 'student_images/5.jpg',
+        'tuio_score': 0,
+        'gesture_score': 0,
+        'mac_address': 'F8:AF:05:99:63:18'
     }
 ]
 
