@@ -1,10 +1,13 @@
 import customtkinter as ctk
 from PIL import Image
 from Students_data import read_highschool_students_from_csv
-from QuizGen import CreateQuiz
-import time
+from QuizGen import CreateQuiz  # For TUIO Quiz
+# Import or define CreateGestureQuiz function for Gesture Quiz
+#from QuizGen import CreateGestureQuiz
+
 # Read student data from CSV
-student=read_highschool_students_from_csv('students data.csv')
+student = read_highschool_students_from_csv('students data.csv')
+
 def create_student_gui(student):
     # Initialize the application
     app = ctk.CTk()
@@ -34,6 +37,19 @@ def create_student_gui(student):
     # Display Student Name
     name_label = ctk.CTkLabel(left_frame, text=student['name'], font=("Arial", 18, "bold"))
     name_label.pack()
+
+    # Add Buttons for TUIO Quiz and Gesture Quiz
+    start_tuio_quiz_button = ctk.CTkButton(
+        left_frame, text="Start TUIO Quiz",
+        command=lambda: [app.destroy(), CreateQuiz(student)]  # Function for TUIO Quiz
+    )
+    start_tuio_quiz_button.pack(pady=10)
+
+    start_gesture_quiz_button = ctk.CTkButton(
+        left_frame, text="Start Gesture Quiz",
+        command=lambda: [app.destroy(), CreateGestureQuiz(student)]  # Function for Gesture Quiz
+    )
+    start_gesture_quiz_button.pack(pady=10)
 
     # Right Frame for Details and Images
     right_frame = ctk.CTkFrame(main_frame, width=600, height=500, corner_radius=10)
@@ -81,10 +97,10 @@ def create_student_gui(student):
         tuio_image = ctk.CTkImage(Image.open("tuio.png"), size=(100, 100))
         tuio_label = ctk.CTkLabel(image_frame, image=tuio_image, text="")
         tuio_label.image = tuio_image  # Prevent garbage collection
-        tuio_label.pack(pady=5,padx=20)
+        tuio_label.pack(pady=5, padx=20)
 
-        tuio_text_label = ctk.CTkLabel(image_frame, text=" show the ID 0", font=("Arial", 12))
-        tuio_text_label.pack(pady=5,padx=10)
+        tuio_text_label = ctk.CTkLabel(image_frame, text="Show the ID 0", font=("Arial", 12))
+        tuio_text_label.pack(pady=5, padx=10)
     except Exception as e:
         print(f"Error loading TUIO image: {e}")
 
@@ -93,17 +109,12 @@ def create_student_gui(student):
         gesture_image = ctk.CTkImage(Image.open("handgesture.jpg"), size=(100, 100))
         gesture_label = ctk.CTkLabel(image_frame, image=gesture_image, text="")
         gesture_label.image = gesture_image  # Prevent garbage collection
-        gesture_label.pack(pady=5,padx=10)
+        gesture_label.pack(pady=5, padx=10)
 
         gesture_text_label = ctk.CTkLabel(image_frame, text="Show your hand to the camera", font=("Arial", 12))
-        gesture_text_label.pack(pady=5,padx=10)
+        gesture_text_label.pack(pady=5, padx=10)
     except Exception as e:
         print(f"Error loading Gesture image: {e}")
-    start_quiz_button = ctk.CTkButton(
-        left_frame, text="Start Quiz Tuio ",
-        command=lambda: [app.destroy(), CreateQuiz(student)]
-    )
-    start_quiz_button.pack(pady=20)  
 
     app.mainloop()
-# Call the function to display the GUI for the first student
+
