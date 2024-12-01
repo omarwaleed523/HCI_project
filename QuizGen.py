@@ -165,7 +165,7 @@ def CreateQuiz(student):
         answers_buttons.append(button)
 
     quiz.mainloop()
-
+    
 # Socket configuration
 def start_server_and_quiz(student):
     listensocket = socket.socket()
