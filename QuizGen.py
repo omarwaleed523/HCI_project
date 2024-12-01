@@ -1,3 +1,4 @@
+import threading
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image, ImagePath
@@ -6,103 +7,36 @@ from Students_data import read_highschool_students_from_csv, update_student
 
 count = 0  # Global question index
 students_data = read_highschool_students_from_csv('students data.csv')
-
+selected_button_index = None
+current_quiz = None
+answers_buttons = []  # Declare globally for button updates
+lock=threading.Lock()
 # Quiz questions
 questions = [
-    {
-        "question": "What is the capital of France?",
-        "options": ["Paris", "London", "Berlin", "Rome"],
-        "answer": "Paris"
-    },
-    {
-        "question": "Which planet is known as the Red Planet?",
-        "options": ["Earth", "Mars", "Jupiter", "Venus"],
-        "answer": "Mars"
-    },
-    {
-        "question": "What is the largest ocean on Earth?",
-        "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-        "answer": "Pacific Ocean"
-    },
-    {
-        "question": "Which organ pumps blood in the human body?",
-        "options": ["Brain", "Stomach", "Heart", "Liver"],
-        "answer": "Heart"
-    },
-    {
-        "question": "What is the freezing point of water?",
-        "options": ["0°C", "10°C", "50°C", "-10°C"],
-        "answer": "0°C"
-    },
-    {
-        "question": "Solve: What is the derivative of x^2?",
-        "options": ["2x", "x^2", "x", "2"],
-        "answer": "2x"
-    },
-    {
-        "question": "Which programming language is known for web development?",
-        "options": ["Python", "Java", "JavaScript", "C++"],
-        "answer": "JavaScript"
-    },
-    {
-        "question": "Who proposed the theory of relativity?",
-        "options": ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"],
-        "answer": "Albert Einstein"
-    },
-    {
-        "question": "What is the chemical symbol for water?",
-        "options": ["H2O", "O2", "CO2", "HO2"],
-        "answer": "H2O"
-    },
-    {
-        "question": "What does HTTP stand for?",
-        "options": [
-            "Hyper Text Transfer Protocol",
-            "High Transfer Text Protocol",
-            "Hyperlink Text Transfer Program",
-            "High Traffic Transfer Protocol"
-        ],
-        "answer": "Hyper Text Transfer Protocol"
-    },
-    {
-        "question": "Which of these is a renewable energy source?",
-        "options": ["Solar", "Coal", "Gas", "Oil"],
-        "answer": "Solar"
-    },
-    {
-        "question": "What is the square root of 64?",
-        "options": ["8", "6", "7", "9"],
-        "answer": "8"
-    },
-    {
-        "question": "What does HTML stand for?",
-        "options": [
-            "Hyper Text Markup Language",
-            "Home Tool Markup Language",
-            "Hyperlinks Text Markup Language",
-            "Hyper Text Management Language"
-        ],
-        "answer": "Hyper Text Markup Language"
-    },
-    {
-        "question": "Which gas do plants use for photosynthesis?",
-        "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
-        "answer": "Carbon Dioxide"
-    }
+    {"question": "What is the capital of France?", "options": ["Paris", "London", "Berlin", "Rome"], "answer": "Paris"},
+    {"question": "Which planet is known as the Red Planet?", "options": ["Earth", "Mars", "Jupiter", "Venus"], "answer": "Mars"},
+    {"question": "What is the largest ocean on Earth?", "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], "answer": "Pacific Ocean"},
+    {"question": "Which organ pumps blood in the human body?", "options": ["Brain", "Stomach", "Heart", "Liver"], "answer": "Heart"},
+    {"question": "What is the freezing point of water?", "options": ["0°C", "10°C", "50°C", "-10°C"], "answer": "0°C"},
+    {"question": "Solve: What is the derivative of x^2?", "options": ["2x", "x^2", "x", "2"], "answer": "2x"},
+    {"question": "Which programming language is known for web development?", "options": ["Python", "Java", "JavaScript", "C++"], "answer": "JavaScript"},
+    {"question": "Who proposed the theory of relativity?", "options": ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"], "answer": "Albert Einstein"},
+    {"question": "What is the chemical symbol for water?", "options": ["H2O", "O2", "CO2", "HO2"], "answer": "H2O"},
+    {"question": "What does HTTP stand for?", "options": ["Hyper Text Transfer Protocol", "High Transfer Text Protocol", "Hyperlink Text Transfer Program", "High Traffic Transfer Protocol"], "answer": "Hyper Text Transfer Protocol"},
+    {"question": "Which of these is a renewable energy source?", "options": ["Solar", "Coal", "Gas", "Oil"], "answer": "Solar"},
+    {"question": "What is the square root of 64?", "options": ["8", "6", "7", "9"], "answer": "8"},
+    {"question": "What does HTML stand for?", "options": ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks Text Markup Language", "Hyper Text Management Language"], "answer": "Hyper Text Markup Language"},
+    {"question": "Which gas do plants use for photosynthesis?", "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], "answer": "Carbon Dioxide"}
 ]
 
 def show_message(quiz, text):
-    """
-    Displays a temporary message box for 2 seconds.
-    """
+    """Displays a temporary message box for 2 seconds."""
     message_box = ctk.CTkLabel(quiz, text=text, font=("Arial", 14), fg_color="gray", text_color="white", corner_radius=10)
     message_box.place(relx=0.5, rely=0.8, anchor="center")
     quiz.after(2000, message_box.destroy)
 
 def button_clicked(answer, correct_answer, button, quiz, qlabel, answers_buttons, student, score_label):
-    """
-    Handles button clicks and moves to the next question after a short delay.
-    """
+    """Handles button clicks and moves to the next question after a short delay."""
     if answer == correct_answer:
         button.configure(fg_color="green")
         show_message(quiz, "Correct!")
@@ -116,30 +50,59 @@ def button_clicked(answer, correct_answer, button, quiz, qlabel, answers_buttons
     quiz.after(2000, lambda: NextQ(quiz, qlabel, answers_buttons, student, score_label))
 
 def NextQ(quiz, qlabel, answers_buttons, student, score_label):
-    """
-    Updates the question and answers for the next question.
-    """
+    """Updates the question and answers for the next question."""
     global count
-    count += 1
-    if count < len(questions):
-        qlabel.configure(text=questions[count]['question'])
-        for i, button in enumerate(answers_buttons):
-            button.configure(
-                text=questions[count]['options'][i],
-                fg_color="gray",
-                command=lambda btn=button, option=questions[count]['options'][i]: button_clicked(option, questions[count]['answer'], btn, quiz, qlabel, answers_buttons, student, score_label)
-            )
+    with lock:
+        count += 1
+        if count < len(questions):
+            qlabel.configure(text=questions[count]['question'])
+            
+            # Reset button states
+            for button in answers_buttons:
+                button.configure(fg_color="gray", text="")
+            
+            # Update buttons with new options
+            for i, button in enumerate(answers_buttons):
+                button.configure(
+                    text=questions[count]['options'][i],
+                    fg_color="gray",
+                    command=lambda btn=button, option=questions[count]['options'][i]: button_clicked(option, questions[count]['answer'], btn, quiz, qlabel, answers_buttons, student, score_label)
+                )
+        else:
+            qlabel.configure(text="Quiz Completed!")
+            for button in answers_buttons:
+                button.destroy()
+            update_student(student=student)
+
+def update_button_color(selected_index):
+    """Update the button colors based on the selected answer."""
+    global answers_buttons, selected_button_index
+    for i, button in enumerate(answers_buttons):
+        if i == selected_index:
+            button.configure(fg_color="green")  # Highlight selected button
+        else:
+            button.configure(fg_color="gray")  # Reset other buttons
+    selected_button_index = selected_index
+
+def choose_answer_based_on_angle(angle):
+    """Choose an answer based on the received marker angle."""
+    global selected_button_index
+    # Divide 360° into four quadrants
+    if 0 <= angle < 50:
+        selected_index = 0
+    elif 60 <= angle < 100:
+        selected_index = 1
+    elif 110 <= angle < 160:
+        selected_index = 2
     else:
-        qlabel.configure(text="Quiz Completed!")
-        for button in answers_buttons:
-            button.destroy()
-        update_student(student=student)
+        selected_index = 3
+
+    if selected_index != selected_button_index:
+        update_button_color(selected_index)
 
 def CreateQuiz(student):
-    """
-    Creates the quiz window with questions and options.
-    """
-    global count
+    """Creates the quiz window with questions and options."""
+    global count, answers_buttons
     count = 0
 
     quiz = ctk.CTk()
@@ -165,23 +128,87 @@ def CreateQuiz(student):
         answers_buttons.append(button)
 
     quiz.mainloop()
-    
+
+def update_button_color(selected_index):
+    """Update the button colors based on the selected answer."""
+    global answers_buttons, selected_button_index
+    for i, button in enumerate(answers_buttons):
+        if i == selected_index:
+            button.configure(fg_color="green")  # Highlight selected button
+        else:
+            button.configure(fg_color="gray")  # Reset other buttons
+    selected_button_index = selected_index
+
+
 # Socket configuration
 def start_server_and_quiz(student):
+    """Start the socket server and launch the quiz."""
+    global current_quiz
+
     listensocket = socket.socket()
     Port = 8000
-    maxConnections = 999
     IP = socket.gethostname()
 
     listensocket.bind(('', Port))
-    listensocket.listen(maxConnections)
+    listensocket.listen(1)
     print("Server started at " + IP + " on port " + str(Port))
-
     print("Waiting for a client to connect...")
-    clientsocket, address = listensocket.accept()
+
+    client_socket, address = listensocket.accept()
     print(f"New connection made from {address}")
 
+    # Start a thread to handle client data
+    threading.Thread(target=handle_client_data, args=(client_socket,), daemon=True).start()
+
+    # Create the quiz
     CreateQuiz(student)
 
-if __name__ == "__main__":
-    start_server_and_quiz()
+
+
+def parse_client_data(data):
+    """Parse the client data string into a list of data objects."""
+    markers = []
+    try:
+        # Check if the data contains multiple markers separated by ";"
+        if ";" in data:
+            for marker_info in data.split(";"):
+                marker_info = marker_info.strip()
+                if marker_info:  # Ensure marker info is not empty
+                    marker_id, marker_angle = marker_info.split(",")
+                    markers.append({'id': int(marker_id), 'angle': float(marker_angle)})  # Use float for angle
+                    print({'id': int(marker_id), 'angle': float(marker_angle)})
+        else:
+            # Handle single marker data
+            marker_id, marker_angle = data.split(",")
+            markers.append({'id': int(marker_id), 'angle': float(marker_angle)})  # Use float for angle
+            print({'id': int(marker_id), 'angle': float(marker_angle)})
+    except ValueError as e:
+        print(f"Invalid data format received: {data} - Error: {e}")
+    except Exception as e:
+        print(f"Unexpected error while parsing data: {e}")
+    return markers
+
+
+def handle_client_data(client_socket):
+    """Continuously receive data from the client."""
+    global current_quiz, selected_button_index, answers_buttons
+    while True:
+        data = client_socket.recv(1024).decode('utf-8')
+        if data:
+            markers = parse_client_data(data)
+            if len(markers) == 1:
+                for marker in markers:
+                    # Choose the answer based on the angle of the marker
+                    if marker['id'] == 0:
+                        choose_answer_based_on_angle(marker['angle'])
+                    elif marker['id'] == 1:
+                # If two markers are present, invoke the selected button
+                        if selected_button_index is not None:
+                            print(f"Invoking button for selected index: {selected_button_index}")
+                            answers_buttons[selected_button_index].invoke()
+                            selected_button_index=None
+
+
+# To start the quiz and server with a student:
+# if __name__=='__main__':
+#     start_server_and_quiz(student=students_data[0])
