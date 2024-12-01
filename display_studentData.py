@@ -41,7 +41,7 @@ def create_student_gui(student):
     # Add Buttons for TUIO Quiz and Gesture Quiz
     start_tuio_quiz_button = ctk.CTkButton(
         left_frame, text="Start TUIO Quiz",
-        command=lambda: [app.destroy(), start_server_and_quiz()]  # Call start_server_and_quiz
+        command=lambda: [app.destroy(), start_server_and_quiz(student)]  # Call start_server_and_quiz
     )
     start_tuio_quiz_button.pack(pady=10)
 
