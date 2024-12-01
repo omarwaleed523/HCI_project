@@ -1,9 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
 from Students_data import read_highschool_students_from_csv
-from QuizGen import CreateQuiz  # For TUIO Quiz
+from QuizGen import start_server_and_quiz  # For TUIO Quiz Server Start
 # Import or define CreateGestureQuiz function for Gesture Quiz
-#from QuizGen import CreateGestureQuiz
+# from QuizGen import CreateGestureQuiz
 
 # Read student data from CSV
 student = read_highschool_students_from_csv('students data.csv')
@@ -41,7 +41,7 @@ def create_student_gui(student):
     # Add Buttons for TUIO Quiz and Gesture Quiz
     start_tuio_quiz_button = ctk.CTkButton(
         left_frame, text="Start TUIO Quiz",
-        command=lambda: [app.destroy(), CreateQuiz(student)]  # Function for TUIO Quiz
+        command=lambda: [app.destroy(), start_server_and_quiz()]  # Call start_server_and_quiz
     )
     start_tuio_quiz_button.pack(pady=10)
 
@@ -117,4 +117,3 @@ def create_student_gui(student):
         print(f"Error loading Gesture image: {e}")
 
     app.mainloop()
-

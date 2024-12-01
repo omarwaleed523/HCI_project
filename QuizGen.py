@@ -1,9 +1,13 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image, ImagePath
-from Students_data import read_highschool_students_from_csv,update_student
+import socket
+from Students_data import read_highschool_students_from_csv, update_student
+
 count = 0  # Global question index
-students_data=read_highschool_students_from_csv('students data.csv')
+students_data = read_highschool_students_from_csv('students data.csv')
+
+# Quiz questions
 questions = [
     {
         "question": "What is the capital of France?",
@@ -86,69 +90,57 @@ questions = [
         "answer": "Carbon Dioxide"
     }
 ]
+
 def show_message(quiz, text):
     """
     Displays a temporary message box for 2 seconds.
     """
     message_box = ctk.CTkLabel(quiz, text=text, font=("Arial", 14), fg_color="gray", text_color="white", corner_radius=10)
     message_box.place(relx=0.5, rely=0.8, anchor="center")
-
-    # Remove the message box after 2 seconds
     quiz.after(2000, message_box.destroy)
-def button_clicked(answer, correct_answer, button, quiz, qlabel, answers_buttons,student,score_label):
-    
+
+def button_clicked(answer, correct_answer, button, quiz, qlabel, answers_buttons, student, score_label):
     """
     Handles button clicks and moves to the next question after a short delay.
     """
     if answer == correct_answer:
         button.configure(fg_color="green")
         show_message(quiz, "Correct!")
-        student['tuio_score']+=10
+        student['tuio_score'] += 10
     else:
         button.configure(fg_color="red")
         show_message(quiz, "Not Correct!")
-        student['tuio_score']-=5
+        student['tuio_score'] -= 5
 
     score_label.configure(text=f"{student['name']} : {student['tuio_score']}")
+    quiz.after(2000, lambda: NextQ(quiz, qlabel, answers_buttons, student, score_label))
 
-    # Move to the next question after a delay
-    quiz.after(2000, lambda: NextQ(quiz, qlabel, answers_buttons,student,score_label))
-
-
-
-def NextQ(quiz, qlabel, answers_buttons,student,Score_label):
+def NextQ(quiz, qlabel, answers_buttons, student, score_label):
     """
     Updates the question and answers for the next question.
     """
     global count
-    count += 1  # Increment question index
-    quiz.title(f'Question {count + 1}')
-    if count < len(questions):  # If there are more questions
-        # Update question label
+    count += 1
+    if count < len(questions):
         qlabel.configure(text=questions[count]['question'])
-        
-        # Update answer buttons
         for i, button in enumerate(answers_buttons):
             button.configure(
                 text=questions[count]['options'][i],
                 fg_color="gray",
-                command=lambda btn=button, option=questions[count]['options'][i]: button_clicked(option, questions[count]['answer'], btn, quiz, qlabel, answers_buttons,student,Score_label)
+                command=lambda btn=button, option=questions[count]['options'][i]: button_clicked(option, questions[count]['answer'], btn, quiz, qlabel, answers_buttons, student, score_label)
             )
     else:
-        # If no more questions, display completion message
         qlabel.configure(text="Quiz Completed!")
         for button in answers_buttons:
-            button.destroy()  # Remove answer buttons
+            button.destroy()
         update_student(student=student)
-
 
 def CreateQuiz(student):
     """
     Creates the quiz window with questions and options.
     """
-    tuioScoure=student['tuio_score']
     global count
-    count = 0  # Reset question index
+    count = 0
 
     quiz = ctk.CTk()
     quiz.geometry('900x400+400+150')
@@ -157,39 +149,41 @@ def CreateQuiz(student):
     mainframe = ctk.CTkFrame(quiz, width=500, height=400, corner_radius=15)
     mainframe.pack(pady=30)
 
-    # Score label (placeholder for future use)
-    Score_label = ctk.CTkLabel(mainframe, text=f"{student['name']} : {tuioScoure}")
-    Score_label.place(relx=0.5, rely=0.1, anchor='center')
+    score_label = ctk.CTkLabel(mainframe, text=f"{student['name']} : {student['tuio_score']}")
+    score_label.place(relx=0.5, rely=0.1, anchor='center')
 
-    # Question label
     question_label = ctk.CTkLabel(mainframe, text=questions[count]['question'], font=("Arial", 16))
     question_label.place(relx=0.5, rely=0.3, anchor='center')
 
-    # Answer buttons
     answers_buttons = []
-
-    # Button 1 (First row, left)
-    answerButton1 = ctk.CTkButton(mainframe, text=questions[count]['options'][0],
-                                  command=lambda: button_clicked(questions[count]['options'][0], questions[count]['answer'], answerButton1, quiz, question_label, answers_buttons,student,Score_label))
-    answerButton1.place(relx=0.3, rely=0.5, anchor='center')
-    answers_buttons.append(answerButton1)
-
-    # Button 2 (First row, right)
-    answerButton2 = ctk.CTkButton(mainframe, text=questions[count]['options'][1],
-                                  command=lambda: button_clicked(questions[count]['options'][1], questions[count]['answer'], answerButton2, quiz, question_label, answers_buttons,student,Score_label))
-    answerButton2.place(relx=0.7, rely=0.5, anchor='center')
-    answers_buttons.append(answerButton2)
-
-    # Button 3 (Second row, left)
-    answerButton3 = ctk.CTkButton(mainframe, text=questions[count]['options'][2],
-                                  command=lambda: button_clicked(questions[count]['options'][2], questions[count]['answer'], answerButton3, quiz, question_label, answers_buttons,student,Score_label))
-    answerButton3.place(relx=0.3, rely=0.7, anchor='center')
-    answers_buttons.append(answerButton3)
-
-    # Button 4 (Second row, right)
-    answerButton4 = ctk.CTkButton(mainframe, text=questions[count]['options'][3],
-                                  command=lambda: button_clicked(questions[count]['options'][3], questions[count]['answer'], answerButton4, quiz, question_label, answers_buttons,student,Score_label))
-    answerButton4.place(relx=0.7, rely=0.7, anchor='center')
-    answers_buttons.append(answerButton4)
+    for i, option in enumerate(questions[count]['options']):
+        button = ctk.CTkButton(
+            mainframe, text=option,
+            command=lambda opt=option: button_clicked(opt, questions[count]['answer'], button, quiz, question_label, answers_buttons, student, score_label)
+        )
+        button.place(relx=0.3 + (i % 2) * 0.4, rely=0.5 + (i // 2) * 0.2, anchor='center')
+        answers_buttons.append(button)
 
     quiz.mainloop()
+
+# Socket configuration
+def start_server_and_quiz():
+    listensocket = socket.socket()
+    Port = 8000
+    maxConnections = 999
+    IP = socket.gethostname()
+
+    listensocket.bind(('', Port))
+    listensocket.listen(maxConnections)
+    print("Server started at " + IP + " on port " + str(Port))
+
+    print("Waiting for a client to connect...")
+    clientsocket, address = listensocket.accept()
+    print(f"New connection made from {address}")
+
+    # Select the student for the quiz
+    student = students_data[0]  # For simplicity, choose the first student
+    CreateQuiz(student)
+
+if __name__ == "__main__":
+    start_server_and_quiz()
