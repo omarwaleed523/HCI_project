@@ -101,61 +101,74 @@ def parse_client_data(data):
 
 
 # The rest of the code remains the same as in your original script
-def update_gui_based_on_marker(marker,student):
+def update_gui_based_on_marker(marker, student):
     # Find existing image in moving_images_info
-    cat=None
-    stick=False
+    cat = None
+    for image in moving_images_info:
+        if marker['id'] == image['id']:
+            cat = image
+            break
+
+    stick = False
     for id in array:
         if id == marker['id']:
-            stick=True
+            stick = True
+
     # If the marker is not in moving_images_info, create the image
-    if not stick:
+    if cat is None:
         image_path = f'fruit_images/{marker["id"]}.png'
         if image_path in image_paths:
-            # Load the image
-            new_image = Image.open(image_path)
-            resized_image = new_image.resize((100, 100))
-            image_tk = ImageTk.PhotoImage(resized_image)
+            try:
+                # Load the image
+                new_image = Image.open(image_path)
+                resized_image = new_image.resize((100, 100))
+                image_tk = ImageTk.PhotoImage(resized_image)
 
-            # Create and place the image
-            image_label = ctk.CTkLabel(mainframe, image=image_tk, text="")
-            image_label.image = image_tk
-            image_label.place(x=marker['x'], y=marker['y'])
-            # Store the image information
-            cat = {
-                'id': int(marker['id']),
-                'label': image_label,
-                'image': image_tk,
-                'x': marker['x'],
-                'y': marker['y'],
-                'is_there': False,
-                'image_path': image_path
-            }
-            moving_images_info.append(cat)
-        # Update the position of the existing image
+                # Create and place the image
+                image_label = ctk.CTkLabel(mainframe, image=image_tk, text="")
+                image_label.image = image_tk
+                image_label.place(x=marker['x'], y=marker['y'])
+
+                # Store the image information
+                cat = {
+                    'id': int(marker['id']),
+                    'label': image_label,
+                    'image': image_tk,
+                    'x': marker['x'],
+                    'y': marker['y'],
+                    'is_there': False,
+                    'image_path': image_path
+                }
+                moving_images_info.append(cat)
+            except Exception as e:
+                print(f"Error creating image for marker {marker['id']}: {e}")
+                return  # Exit if the image creation fails
+
+    # If `cat` is still None, something went wrong; return early
+    if cat is None:
+        print(f"Error: Unable to find or create image for marker {marker['id']}")
+        return
+
+    # Update the position of the existing image
+    if not stick:
         cat['label'].place(x=marker['x'], y=marker['y'])
         cat['x'] = marker['x']
         cat['y'] = marker['y']
-        print(f" image info {image_info}")
+        print(f"Updated image position: {cat}")
         for gray in image_info:
-            if gray['id']==cat['id']:
-                for i in range(len(moving_images_info)):
-                    pass 
-                # messagebox.showinfo("welcome")
+            if gray['id'] == cat['id']:
                 if not cat['is_there']:  # If the image hasn't stuck yet
-                            stickiness_range = 20
-                            # Adjustable range for sticking
-                            if (gray['x'] - stickiness_range <= cat['x'] <= gray['x'] + 100 + stickiness_range) and (gray['y'] - stickiness_range <= cat['y'] <= gray['y'] + 100 + stickiness_range):
-                                messagebox.showinfo("kosom ezzat")
-                                cat['is_there'] = True
-                                array.append(cat[id])
-                                cat['x'] = gray['x']
-                                cat['y'] = gray['y']
-                                print(f'List has been updated !!!!! {cat}')
-                                # Once stuck, align the position with the gray image
-                                cat['label'].place(x=cat['x'], y=cat['y'])
-                                break
-
+                    stickiness_range = 20  # Adjustable range for sticking
+                    if (gray['x'] - stickiness_range <= cat['x'] + 50 <= gray['x'] + 100 + stickiness_range) and \
+                            (gray['y'] - stickiness_range <= cat['y'] + 50 <= gray['y'] + 100 + stickiness_range):
+                        cat['is_there'] = True
+                        array.append(cat['id'])
+                        cat['x'] = gray['x']
+                        cat['y'] = gray['y']
+                        print(f'List has been updated !!!!! {cat}')
+                        # Once stuck, align the position with the gray image
+                        cat['label'].place(x=cat['x'], y=cat['y'])
+                        break
 
 
 
