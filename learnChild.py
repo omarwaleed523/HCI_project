@@ -222,4 +222,8 @@ if __name__ == '__main__':
     create_server_gui(student_data[0])
 
 
-
+def show_message(quiz, text):
+    """Displays a temporary message box for 2 seconds."""
+    message_box = ctk.CTkLabel(quiz, text=text, font=("Arial", 14), fg_color="gray", text_color="white", corner_radius=10)
+    message_box.place(relx=0.5, rely=0.8, anchor="center")
+    quiz.after(2000, message_box.destroy)
