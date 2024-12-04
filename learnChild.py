@@ -103,14 +103,13 @@ def parse_client_data(data):
 # The rest of the code remains the same as in your original script
 def update_gui_based_on_marker(marker,student):
     # Find existing image in moving_images_info
-    cat = None
-    for image_info in moving_images_info:
-        if marker['id'] == image_info['id']:
-            cat = image_info
-            break
-
+    cat=None
+    stick=False
+    for id in array:
+        if id == marker['id']:
+            stick=True
     # If the marker is not in moving_images_info, create the image
-    if cat is None:
+    if not stick:
         image_path = f'fruit_images/{marker["id"]}.png'
         if image_path in image_paths:
             # Load the image
@@ -133,32 +132,34 @@ def update_gui_based_on_marker(marker,student):
                 'image_path': image_path
             }
             moving_images_info.append(cat)
-    else:
         # Update the position of the existing image
         cat['label'].place(x=marker['x'], y=marker['y'])
         cat['x'] = marker['x']
         cat['y'] = marker['y']
-
-        # Check if the image should "stick" to a gray image
-        for gray_image in image_info:
-            print(f'gray_image=={gray_image}    ,    catttt===={cat}')
-            if gray_image['id'] == cat['id']:
+        print(f" image info {image_info}")
+        for gray in image_info:
+            if gray['id']==cat['id']:
+                for i in range(len(moving_images_info)):
+                    pass 
+                # messagebox.showinfo("welcome")
                 if not cat['is_there']:  # If the image hasn't stuck yet
-                    stickiness_range = 10
-                    # Adjustable range for sticking
-                    if (gray_image['x'] - stickiness_range <= cat['x'] <= gray_image['x'] + 100 + stickiness_range) and (gray_image['y'] - stickiness_range <= cat['y'] <= gray_image['y'] + 100 + stickiness_range):
-                        cat['is_there'] = True
-                        cat['x'] = gray_image['x']
-                        cat['y'] = gray_image['y']
-                        print(f'List has been updated !!!!! {cat}')
-                        # Once stuck, align the position with the gray image
-                        cat['label'].place(x=cat['x'], y=cat['y'])
-                        break
+                            stickiness_range = 20
+                            # Adjustable range for sticking
+                            if (gray['x'] - stickiness_range <= cat['x'] <= gray['x'] + 100 + stickiness_range) and (gray['y'] - stickiness_range <= cat['y'] <= gray['y'] + 100 + stickiness_range):
+                                messagebox.showinfo("kosom ezzat")
+                                cat['is_there'] = True
+                                array.append(cat[id])
+                                cat['x'] = gray['x']
+                                cat['y'] = gray['y']
+                                print(f'List has been updated !!!!! {cat}')
+                                # Once stuck, align the position with the gray image
+                                cat['label'].place(x=cat['x'], y=cat['y'])
+                                break
 
 
 
 
-array=[False,False,False,False]
+array=[]
 # Ensure CreateLearnScreen, handle_client_data, start_server, and create_server_gui functions
 # are implemented exactly as they were in your original script
 def handle_client_data(client_socket, student):
@@ -167,7 +168,7 @@ def handle_client_data(client_socket, student):
         data = client_socket.recv(1024).decode('utf-8')
         if data:
             markers = parse_client_data(data)  # Parse the received data
-            print(f"Received markers: {markers}")
+            # print(f"Received markers: {markers}")
             for marker in markers:
                 if marker not in marker_info:
                     marker_info.append(marker)  # Save marker to marker_info if not already there
