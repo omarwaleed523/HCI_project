@@ -93,12 +93,11 @@ public class TuioDemo : Form, TuioListener
 		client.connect();
 
 		// Create a TCP/IP socket
-		 client1 = new TcpClient("DESKTOP-8161GCK", 8000);
+		 client1 = new TcpClient("LAPTOP-1SMMKPDU", 8000);
 		// Get the stream to send data
 		 stream = client1.GetStream();
 
 	}
-
 	private void Form_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
 	{
 
@@ -329,7 +328,7 @@ public class TuioDemo : Form, TuioListener
 			StringBuilder dataBuilder = new StringBuilder();
 			foreach (var marker in markers)
 			{
-				dataBuilder.Append($"{marker.SymbolID},{marker.AngleDegrees};");
+				dataBuilder.Append($"{marker.SymbolID},{marker.AngleDegrees},{marker.X},{marker.Y};");
 			}
 
 			string data = dataBuilder.ToString().TrimEnd(';');

@@ -1,14 +1,116 @@
 import customtkinter as ctk
+import cv2
+import mediapipe as mp
 from PIL import Image
 from Students_data import read_highschool_students_from_csv
-from QuizGen import start_server_and_quiz  # For TUIO Quiz Server Start
-# Import or define CreateGestureQuiz function for Gesture Quiz
-# from QuizGen import CreateGestureQuiz
+from QuizGen import start_server_and_quiz
+from learnChild import create_server_gui
+import threading
+from tkinter import messagebox
+import time
+
+# Global variables to control the camera feed and gesture detection loop
+stop_detection = False
+start_tuio_quiz_button = None
+start_gesture_quiz_button = None
+option1=False
+option2=False
+# Function to detect hand gestures and trigger button clicks
+def detect_gesture_and_click(student):
+    global stop_detection, start_tuio_quiz_button, start_gesture_quiz_button,option1,option2
+    # Initialize MediaPipe Hands
+    mp_hands = mp.solutions.hands
+    hands = mp_hands.Hands()
+    mp_draw = mp.solutions.drawing_utils
+
+    # Start webcam capture
+    cap = cv2.VideoCapture(0)
+
+
+
+    with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.9) as hands:
+        start_time = None  # Timer to track 3-second window after option click
+        
+        while cap.isOpened():
+            if stop_detection:
+                break
+            
+            ret, frame = cap.read()
+            if not ret:
+                break
+            
+            # Flip and convert frame for processing
+            frame = cv2.flip(frame, 1)
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = hands.process(frame_rgb)
+
+            if results.multi_hand_landmarks:
+                for landmarks in results.multi_hand_landmarks:
+                    # Draw hand landmarks (skeleton of the hand)
+                    mp_draw.draw_landmarks(frame, landmarks, mp_hands.HAND_CONNECTIONS)
+
+                    # Get the coordinates for the fingers
+                    index_finger_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                    middle_finger_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+                    ring_finger_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
+                    pinky_finger_tip = landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+
+                    # Check if index finger is raised (Option 1)
+                    if index_finger_tip.y < landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_PIP].y and \
+                        middle_finger_tip.y > landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_PIP].y and \
+                        ring_finger_tip.y > landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_PIP].y and \
+                        pinky_finger_tip.y > landmarks.landmark[mp_hands.HandLandmark.PINKY_PIP].y:
+                        print("Option 1 clicked")
+                        start_time = time.time()  # Start the 3-second timer
+                        option1=True
+
+                    # Check if both index and middle fingers are raised (Option 2)
+                    if index_finger_tip.y < landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_PIP].y and \
+                        middle_finger_tip.y < landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_PIP].y and \
+                        ring_finger_tip.y > landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_PIP].y and \
+                        pinky_finger_tip.y > landmarks.landmark[mp_hands.HandLandmark.PINKY_PIP].y:
+                        print("Option 2 clicked")
+                        start_time = time.time()  # Start the 3-second timer
+                        option2=True
+
+            # If 3 seconds have passed since the option was clicked, stop the camera feed
+            if start_time and time.time() - start_time >= 2:
+                print("Closing camera after 2 seconds")
+                if option1:
+                    stop_detection = True  # Stop the gesture detection loop
+                    app.quit()
+                    cap.release()
+                    cv2.destroyAllWindows()  
+                    create_server_gui(student)# Close the GUI window
+                    
+                if option2:
+                    stop_detection = True  # Stop the gesture detection loop
+                    app.quit()  # Close the GUI window
+                    cap.release()
+                    cv2.destroyAllWindows() 
+                    
+                break
+            # Show the frame with detected hand landmarks
+            cv2.imshow("Hand Gesture Detection", frame)
+
+            # Break the loop if 'q' is pressed
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        # Release resources after camera feed is stopped
+        cap.release()
+        cv2.destroyAllWindows()
+# Stop gesture detection function
+def stop_gesture_detection():
+    global stop_detection
+    stop_detection = True
 
 # Read student data from CSV
-student = read_highschool_students_from_csv('students data.csv')
+student_data= read_highschool_students_from_csv('students data.csv')
 
 def create_student_gui(student):
+    global start_tuio_quiz_button, start_gesture_quiz_button, app
+
     # Initialize the application
     app = ctk.CTk()
     app.geometry("900x400+400+150")
@@ -40,14 +142,14 @@ def create_student_gui(student):
 
     # Add Buttons for TUIO Quiz and Gesture Quiz
     start_tuio_quiz_button = ctk.CTkButton(
-        left_frame, text="Start TUIO Quiz",
-        command=lambda: [app.destroy(), start_server_and_quiz(student)]  # Call start_server_and_quiz
+        left_frame, text="Start TUIO Learning",
+        #command=lambda: [app.destroy(), create_server_gui(student)]  # Call TUIO Quiz Server
     )
     start_tuio_quiz_button.pack(pady=10)
 
     start_gesture_quiz_button = ctk.CTkButton(
         left_frame, text="Start Gesture Quiz",
-        command=lambda: [app.destroy(), CreateGestureQuiz(student)]  # Function for Gesture Quiz
+        #command=lambda: [app.destroy(), start_gesture_quiz(student)]  # Function for Gesture Quiz
     )
     start_gesture_quiz_button.pack(pady=10)
 
@@ -90,7 +192,7 @@ def create_student_gui(student):
 
     # Frame for TUIO and Gesture Images (Column 1)
     image_frame = ctk.CTkFrame(right_frame, corner_radius=10)
-    image_frame.grid(row=0, column=1, padx=10, pady=10, rowspan=len(fields) + 1, sticky="nsew")  # Span rows including scores
+    image_frame.grid(row=0, column=1, padx=10, pady=10, rowspan=len(fields) + 1, sticky="nsew")
 
     # TUIO Image and Text
     try:
@@ -107,13 +209,28 @@ def create_student_gui(student):
     # Gesture Image and Text
     try:
         gesture_image = ctk.CTkImage(Image.open("handgesture.jpg"), size=(100, 100))
-        gesture_label = ctk.CTkLabel(image_frame, image=gesture_image, text="")
+        gesture_label = ctk.CTkLabel(image_frame, image=gesture_image, text="") 
         gesture_label.image = gesture_image  # Prevent garbage collection
         gesture_label.pack(pady=5, padx=10)
 
-        gesture_text_label = ctk.CTkLabel(image_frame, text="Show your hand to the camera", font=("Arial", 12))
+        gesture_text_label = ctk.CTkLabel(image_frame, text="Gesture Recognition", font=("Arial", 12))
         gesture_text_label.pack(pady=5, padx=10)
     except Exception as e:
-        print(f"Error loading Gesture image: {e}")
+        print(f"Error loading gesture image: {e}")
 
-    app.mainloop()
+
+    # Start Gesture Detection
+    if not stop_detection:
+        start_detection_thread(student=student_data[0])
+    # Run the application
+        app.mainloop()
+
+def start_detection_thread(student):
+    global stop_detection
+    stop_detection = False
+    detection_thread = threading.Thread(target=detect_gesture_and_click,args=(student,))
+    detection_thread.start()
+
+if __name__ == "__main__":
+    create_student_gui(student_data[0])
+    

@@ -34,3 +34,9 @@ C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TUIO_DEMO
 C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
 C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TuioDemo.exe
 C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TuioDemo.pdb

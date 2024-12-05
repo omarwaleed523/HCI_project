@@ -5,7 +5,9 @@ from bleak import BleakScanner
 from queue import Queue
 from Students_data import read_highschool_students_from_csv
 from display_studentData import create_student_gui
-import time
+from Face_Main import Face_recog
+
+# Now import the function from Face_Main
 # Global variables
 progress_queue = Queue()
 device_found = False
@@ -36,6 +38,7 @@ async def scan_devices():
                         device_found = True
                         foundedSt = st
                         progress_queue.put((1.0, f"Welcome on board! {st['name']}"))
+                        # root.destroy()
                         return
         
         await asyncio.sleep(0.1)
@@ -57,7 +60,7 @@ def update_gui():
     
     # If a device is found, transition to the student GUI
     if device_found and foundedSt is not None:
-        root.after(0, lambda: [root.destroy(), create_student_gui(foundedSt)])
+        root.after(0, lambda: [root.destroy(),Face_recog(foundedSt)])
     else:
         # Schedule the next update
         root.after(100, update_gui)

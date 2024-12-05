@@ -1,6 +1,8 @@
 id,name,age,grade,gender,student_id,school,class,gpa,email,photo_path,tuio_score,gesture_score,mac_address
-STU001,John Smith,16,10th,Male,HS001,Springfield High School,10-A,3.8,john.smith@studentmail.com,student_images/1.jpg,0,0,00:1A:2B:3C:4D:5E
-STU002,Sarah Johnson,15,9th,Female,HS002,Springfield High School,9-B,3.7,sarah.johnson@studentmail.com,student_images/2.jpg,0,0,11:2B:3C:4D:5E:6F
-STU003,Michael Chen,17,11th,Male,HS003,Riverside High School,11-C,3.5,michael.chen@studentmail.com,student_images/3.jpg,0,0,F8:20:A9:EA:1A:16
-STU004,Emily Davis,14,8th,Female,HS004,Riverside Middle School,8-D,4.0,emily.davis@studentmail.com,student_images/4.jpg,0,0,33:4D:5E:6F:7G:8H
-STU005,MR. Dexter,17,10th,Male,HS005,Riverside Middle School,8-D,4.0,Dexter.sha3ban@studentmail.com,student_images/5.jpg,150,0,F8:AF:05:99:63:18
+STU001,Ayman Ezzat,18,1st,Male,HS001,Helwan University,HCI,4.0,Ayman.ezzat@studentmail.com,images\Ayman Ezzat.jpg,0,0,00:1A:2B:3C:4D:5E
+STU002,Rawan Emad,15,10th,Female,HS002,Adam High School,10-B,3.5,Rawan.Emad@studentmail.com,images\Rawan Emad.jpeg,0,0,11:2B:3C:4D:5E:6F
+STU003,Ahmed Mostafa,15,10th,Male,HS003,Adam High School,10-B,3.2,Ahmed.Mostafa@studentmail.com,student_images/3.jpg,0,0,F8:21:A9:EA:1A:16
+STU004,Omar Moenes,15,10th,Male,HS004,Adam High School,10-C,3.0,Omar.Moenes@studentmail.com,images\Omar Moenes.jpeg,0,0,F8:20:A9:EA:1A:1
+STU005,Ahmed Raouf,15,10th,Male,HS005,Adam High School,10-C,4.0,Ahmed.Raouf@studentmail.com,images\Ahmed Raouf.jpg,0,0,F8:20:A9:EA:1A:16
+STU006,Mohaned Gamal,9,3rd,Male,HS006,Tanta Primary School,3-A,3.7,Mohaned.Gamal@studentmail.com,images\Mohaned Gamal.jpeg,0,0,F8:20:A9:EA:1A:1
+STU007,Omar Waleed,9,3rd,Male,HS007,Zagazig Primary School,3-D,3.8,Omar.Waleed@studentmail.com,images\Omar Waleed.jpeg,0,0,F8:AF:05:99:53:19
