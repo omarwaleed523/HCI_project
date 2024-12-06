@@ -59,7 +59,7 @@ def detect_fruits_with_bboxes(callback):
         # Send detections to the callback
         if detections:
             callback(detections)
-
+            break
         # Display the frame with detections
         cv2.imshow("Fruit Detection", frame)
 
