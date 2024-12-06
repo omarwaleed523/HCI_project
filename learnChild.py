@@ -273,7 +273,7 @@ def rotate(marker, student):
                     fruit_name_label.configure(text=fruit_info[marker['id']]['name'])
                     fruit_description_label.configure(text=fruit_info[marker['id']]['description'])
                     fruit_benefits_label.configure(text=fruit_info[marker['id']]['benefits'])
-            elif 250 < marker['angle'] < 285:
+            elif 250 < marker['angle'] < 300:
                 # If a new marker is detected and there is an active video, stop it # Wait for the video thread to finish
                 # Run the new video in a separate thread 
                   if marker['id'] in fruit_info:
@@ -350,6 +350,5 @@ def create_server_gui(student):
 if __name__ == '__main__':
     # Example student data
     create_server_gui(student_data[1])
-
 
 
