@@ -141,28 +141,40 @@ def update_button_color(selected_index):
 
 
 # Socket configuration
-def start_server_and_quiz(student):
-    """Start the socket server and launch the quiz."""
+def start_server_and_quiz(student, client_socket=None):
+    """Start the quiz with an existing socket connection or create a new one."""
     global current_quiz
 
-    listensocket = socket.socket()
-    Port = 8000
-    IP = socket.gethostname()
+    # If no client socket is provided, create a new connection
+    if client_socket is None:
+        listensocket = socket.socket()
+        Port = 8000
+        IP = socket.gethostname()
 
-    listensocket.bind(('', Port))
-    listensocket.listen(1)
-    print("Server started at " + IP + " on port " + str(Port))
-    print("Waiting for a client to connect...")
+        try:
+            listensocket.bind(('', Port))
+            listensocket.listen(1)
+            print("Server started at " + IP + " on port " + str(Port))
+            print("Waiting for a client to connect...")
 
-    client_socket, address = listensocket.accept()
-    print(f"New connection made from {address}")
+            client_socket, address = listensocket.accept()
+            print(f"New connection made from {address}")
+        except Exception as e:
+            print(f"Error setting up socket: {e}")
+            return
 
     # Start a thread to handle client data
-    threading.Thread(target=handle_client_data, args=(client_socket,), daemon=True).start()
+    try:
+        threading.Thread(target=handle_client_data, args=(client_socket,), daemon=True).start()
+    except Exception as e:
+        print(f"Error starting client data thread: {e}")
+        return
 
     # Create the quiz
-    CreateQuiz(student)
-
+    try:
+        CreateQuiz(student)
+    except Exception as e:
+        print(f"Error creating quiz: {e}")
 
 
 def parse_client_data(data):
