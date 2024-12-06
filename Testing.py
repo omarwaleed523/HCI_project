@@ -1,6 +1,7 @@
 import os
 import cv2
 import mediapipe as mp
+import time
 # initialize Pose estimator
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -340,6 +341,7 @@ def run_pose_recognition():
 
                     # Check if the gesture is 'RotateLeft' or 'RotateRight'
                     if result[0] == "RotateLeft" or result[0] == "RotateRight":
+                        time.sleep(2)
                         cap.release()
                         return True  # Return True when the gesture is recognized
 
