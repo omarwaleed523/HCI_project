@@ -293,7 +293,7 @@ Allpoints=[]
 
 def run_pose_recognition():
     """
-    Run the pose recognition loop. Detects and processes hand gestures in real time using MediaPipe and a recognizer.
+    Run the pose recognition and return True if 'RotateLeft' or 'RotateRight' gesture is recognized.
     """
     pose = mp_pose.Pose(
         min_detection_confidence=0.5,
@@ -338,6 +338,11 @@ def run_pose_recognition():
                     print(result)  # Print the recognized gesture
                     Allpoints.clear()
 
+                    # Check if the gesture is 'RotateLeft' or 'RotateRight'
+                    if result[0] == "RotateLeft" or result[0] == "RotateRight":
+                        cap.release()
+                        return True  # Return True when the gesture is recognized
+
             # Draw pose landmarks
             mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
@@ -354,6 +359,4 @@ def run_pose_recognition():
     finally:
         cap.release()
         cv2.destroyAllWindows()
-
-    run_pose_recognition()
-#run_pose_recognition()
+    return False  # Return False if no valid gesture was recognized
