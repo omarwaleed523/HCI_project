@@ -4,7 +4,6 @@ import threading
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import cv2
-import pygame
 from Students_data import read_highschool_students_from_csv
 from QuizGen import start_server_and_quiz
 student_data=read_highschool_students_from_csv('students data.csv')
@@ -198,59 +197,6 @@ current_video = None
 current_video_thread = None
 video_playing = False  # To track if a video is currently playing
 
-def play_video(marker):
-    global current_video, current_video_thread, video_playing  # Access global variables
-
-    if video_playing:  # If a video is already playing, don't start a new one
-        print("Video is already playing, skipping video playback.")
-        return
-
-    video_path = f"videos/{marker['id']}.mp4"  # Video path based on marker ID
-    listOfVideos.append(video_path)
-
-    # Create a VideoCapture object to open the video
-    cap = cv2.VideoCapture(video_path)
-
-    # Check if the video opened successfully
-    if not cap.isOpened():
-        print(f"Error: Unable to open video {video_path}")
-        return
-
-    # Store the current video object globally to allow stopping later
-    current_video = cap
-    video_playing = True  # Set flag to indicate that a video is playing
-
-    # Create a Tkinter window to display the video
-    window = ctk.CTkToplevel()  # Create a new window to show the video
-    window.title(f"Video for Fruit {marker['id']}")
-
-    video_label = ctk.CTkLabel(window)
-    video_label.pack()
-
-    # Start playing the video in a loop
-    def play_in_background():
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-
-            # Convert the frame to a format that can be used by Tkinter
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame_pil = Image.fromarray(frame_rgb)
-            frame_tk = ImageTk.PhotoImage(frame_pil)
-
-            video_label.configure(image=frame_tk)
-            video_label.image = frame_tk
-
-            cv2.waitKey(30)  # Adjust the delay according to the video's FPS
-
-        cap.release()  # Release the video capture object when done
-        video_playing = False  # Reset video playing flag after the video ends
-
-    # Start the video playing in a separate thread to keep it running in the background
-    current_video_thread = threading.Thread(target=play_in_background)
-    current_video_thread.start()
-
 def rotate(marker, student):
     global current_video, current_video_thread, video_playing  # Access global variables
     show_message(root,"rotate right to show information , rotate left for fun fact, rotate 180 to start quiz")
@@ -273,7 +219,7 @@ def rotate(marker, student):
                     fruit_name_label.configure(text=fruit_info[marker['id']]['name'])
                     fruit_description_label.configure(text=fruit_info[marker['id']]['description'])
                     fruit_benefits_label.configure(text=fruit_info[marker['id']]['benefits'])
-            elif 250 < marker['angle'] < 285:
+            elif 250 < marker['angle'] < 300:
                 # If a new marker is detected and there is an active video, stop it # Wait for the video thread to finish
                 # Run the new video in a separate thread 
                   if marker['id'] in fruit_info:
@@ -350,6 +296,5 @@ def create_server_gui(student):
 if __name__ == '__main__':
     # Example student data
     create_server_gui(student_data[1])
-
 
 
