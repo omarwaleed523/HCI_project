@@ -3,10 +3,12 @@ from PIL import Image, ImageTk, ImageDraw
 from YOLO_TRY import detect_fruits_with_bboxes
 import threading
 from Testing import run_pose_recognition
+from Students_data import read_highschool_students_from_csv
 # Global variables
 image_paths = [f"fruit_images/{i}.png" for i in range(1, 5)]
 image_info = []
 detection_canvas = None  # Canvas to render bounding boxes
+dollardetect = False
 def update_gui_with_detections(detections):
     """
     Update the GUI with bounding boxes and detected fruits.
@@ -69,7 +71,9 @@ def update_gui_with_detections(detections):
                     image_label.image = original_image  # Prevent garbage collection
 
                     print(f"Updated GUI with detected fruit: {fruit_name}")
-            if fruit_name in fruit_info:
+                     # Wait for gesture recognition (either RotateLeft or RotateRight)
+                    gesture_recognized =run_pose_recognition()
+            if fruit_name in fruit_info and gesture_recognized == True:
                     fruit_details = fruit_info[fruit_name]
                     # fruit_name_label.configure(text=f"{fruit_details['name']}")
                     # fruit_description_label.configure(text=f"{fruit_details['description']}")
@@ -77,6 +81,8 @@ def update_gui_with_detections(detections):
                     fruit_name_label.configure(text=f"{fruit_details['name']}")
                     fruit_description_label.configure(text=f"{fruit_details['description']}")
                     fruit_benefits_label.configure(text=f"{fruit_details['benefits']}")
+                    threading.Thread(target=detect_fruits_with_bboxes, args=(update_gui_with_detections,), daemon=True).start()
+
 
 def create_gesture(student):
     global detection_canvas,fruit_benefits_label,fruit_description_label,fruit_name_label
@@ -134,5 +140,7 @@ def create_gesture(student):
 
     root.mainloop()
 
+if __name__ == '__main__':
 
-
+    students=read_highschool_students_from_csv("students data.csv")
+    create_gesture(students[0])
