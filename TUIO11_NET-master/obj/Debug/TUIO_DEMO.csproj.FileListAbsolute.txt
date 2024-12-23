@@ -1,0 +1,48 @@
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/bin/Debug/TuioDemo.exe
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/bin/Debug/TuioDemo.pdb
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/obj/Debug/TUIO_DEMO.csproj.AssemblyReference.cache
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/obj/Debug/TUIO_DEMO.csproj.CoreCompileInputs.cache
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/obj/Debug/TuioDemo.exe
+/Users/moamenibrahem/Downloads/TUIO11_NET-master/obj/Debug/TuioDemo.pdb
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csprojAssemblyReference.cache
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\224307\Downloads\Lab 2 - TUIO + GUI-20241009\TUIO11_NET-master (3)\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\TUIO11_NET-master (1)\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\Hussein\Desktop\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\university\year 4 1st semester\HCI\labs\HCI-project\HCI_project-main\HCI_project-main\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\HCI_project-new-gui\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\LENOVO\Desktop\Hci_project\TUIO11_NET-master\obj\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\bin\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\bin\Debug\TuioDemo.pdb
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.AssemblyReference.cache
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\obj\Debug\TUIO_DEMO.csproj.CoreCompileInputs.cache
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\obj\Debug\TuioDemo.exe
+C:\Users\omarw\Desktop\HCI_project-btats\HCI_project-btats\TUIO11_NET-master\obj\Debug\TuioDemo.pdb

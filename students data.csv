@@ -1,0 +1,8 @@
+id,name,age,grade,gender,student_id,school,class,gpa,email,photo_path,tuio_score,gesture_score,mac_address
+STU001,Ayman Ezzat,18,1st,Male,HS001,Helwan University,HCI,4.0,Ayman.ezzat@studentmail.com,images\Ayman Ezzat.jpg,0,0,00:1A:2B:3C:4D:5E
+STU002,Rawan Emad,15,10th,Female,HS002,Adam High School,10-B,3.5,Rawan.Emad@studentmail.com,images\Rawan Emad.jpeg,0,0,11:2B:3C:4D:5E:6F
+STU003,Ahmed Mostafa,15,10th,Male,HS003,Adam High School,10-B,3.2,Ahmed.Mostafa@studentmail.com,student_images/3.jpg,0,0,F8:21:A9:EA:1A:1
+STU004,Omar Moenes,15,10th,Male,HS004,Adam High School,10-C,3.0,Omar.Moenes@studentmail.com,images\Omar Moenes.jpeg,0,0,F8:20:A9:EA:1A:1
+STU005,Ahmed Raouf,15,10th,Male,HS005,Adam High School,10-C,4.0,Ahmed.Raouf@studentmail.com,images\Ahmed Raouf.jpg,0,0,F8:20:A9:EA:1A:1
+STU006,Mohaned Gamal,9,3rd,Male,HS006,Tanta Primary School,3-A,3.7,Mohaned.Gamal@studentmail.com,images\Mohaned Gamal.jpeg,0,0,F8:AF:05:99:63:18
+STU007,Omar Waleed,9,3rd,Male,HS007,Zagazig Primary School,3-D,3.8,Omar.Waleed@studentmail.com,images\Omar Waleed.jpeg,0,0,F8:AF:05:99:63:18
